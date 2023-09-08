@@ -1,24 +1,28 @@
 # WorkflowRunStats
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/workflow_run_stats`. To experiment with that code, run `bin/console` for an interactive prompt.
+:warning: in development
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ bundle add workflow_run_stats
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ gem install workflow_run_stats
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ workflow_run_stats REPO WORKFLOW [DURATION] --job-duration tmp/job-duration.svg --cumulative-job-duration tmp/cumulative-job-duration.svg
+
+Example:
+
+    $ workflow_run_stats 'octokit/octokit.rb' 'octokit.yml' '2023-06-01..2023-09-01' --job-duration tmp/job-duration.svg --cumulative-job-duration tmp/cumulative-job-duration.svg
+
+![cumulative-job-duration](https://github.com/mizoR/workflow_run_stats/assets/1257116/5c07332d-af5b-48c4-a1e8-df2a3a46b1c7)
+
+![job-duration](https://github.com/mizoR/workflow_run_stats/assets/1257116/48d1b992-972f-4b58-896e-8cb159bfb07c)
 
 ## Development
 

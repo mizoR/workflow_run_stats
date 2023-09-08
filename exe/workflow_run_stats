@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+
+require "workflow_run_stats"
+require 'optparse'
+require 'fileutils'
+
+opt = OptionParser.new
+
+outputs = {}
+
+opt.on('--cumulative-job-duration VAL') {|v| outputs[:cumulative_job_duration] = v }
+opt.on('--job-duration VAL') {|v| outputs[:job_duration] = v }
+
+opt.parse!(ARGV)
+
+repo = ARGV.fetch(0)
+workflow = ARGV.fetch(1)
+created = ARGV.fetch(2, "#{(Date.today - 14)}..#{Date.today}")
+
+workflow_runs = WorkflowRunStats::WorkflowRunsFetcher.new.fetch(repo, workflow, created:)
+
+if workflow_runs.empty?
+  $stderr.puts "No workflow runs."
+
+  exit
+end
+
+# Cumulative duration
+output = outputs.fetch(:cumulative_job_duration, nil)
+
+if output
+  renderer = WorkflowRunStats::CumulativeJobDurationRenderer.new(repo:, workflow:)
+
+  renderer.create_svg(workflow_runs) {|svg| FileUtils.cp(svg, output) }
+
+  puts "Created #{output}..."
+end
+
+# Job duration
+output = outputs.fetch(:job_duration, nil)
+
+if output
+  renderer = WorkflowRunStats::JobDurationRenderer.new(repo:, workflow:)
+
+  renderer.create_svg(workflow_runs) {|svg| FileUtils.cp(svg, output) }
+
+  puts "Created #{output}..."
+end
+
