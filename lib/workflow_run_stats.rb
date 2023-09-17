@@ -76,11 +76,15 @@ module WorkflowRunStats
       raise NotImplementedError
     end
 
-    def run_gnuplot_script(dat:, x_size:)
+    def run_gnuplot_script(dat:, x_size:, format:)
       raise NotImplementedError
     end
 
-    def create_svg(workflow_runs, &block)
+    # @param workflow_runs [Array<WorkflowRun>]
+    # @param format [Symbol] default: :svg
+    def create(workflow_runs, format: :svg, &block)
+      raise ArgumentError, "Invalid format: #{format}" unless %i[png svg].include?(format)
+
       rendered = render(workflow_runs)
 
       Tempfile.create do |tempfile|
@@ -88,19 +92,19 @@ module WorkflowRunStats
 
         tempfile.close
 
-        run_gnuplot_script(dat: tempfile.path, x_size: workflow_runs.size, &block)
+        run_gnuplot_script(dat: tempfile.path, x_size: workflow_runs.size, format:, &block)
       end
     end
 
-    def run_gnuplot_script(dat:, x_size:)
+    def run_gnuplot_script(dat:, x_size:, format:)
       width = 1280 * (x_size / 60.0).round(1)
       width = [width, 640].max
 
-      Tempfile.create(['gnuplot', '.svg' ]) do |svgfile|
+      Tempfile.create(['gnuplot', ".#{format}" ]) do |file|
         Tempfile.create do |gnuplot_script|
           gnuplot_script.puts(<<~SCRIPT)
-            set term svg size #{width},720
-            set out "#{svgfile.path}"
+            set term #{format} size #{width},720
+            set out "#{file.path}"
 
             set datafile separator "\t"
 
@@ -124,7 +128,7 @@ module WorkflowRunStats
           system(%Q[echo load '"#{gnuplot_script.path}"' | gnuplot -], exception: true)
         end
 
-        yield(svgfile.path)
+        yield(file.path)
       end
     end
   end
@@ -169,7 +173,7 @@ module WorkflowRunStats
     def initialize(repo:, workflow:)
       @title = "Cumulative Job Duration Trend (#{repo} - #{workflow})"
       @xlabel = "Date time"
-      @ylabel = "Job duration time [min]"
+      @ylabel = "Jobs duration time [min]"
     end
 
     def render(workflow_runs)

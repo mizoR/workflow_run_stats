@@ -6,8 +6,9 @@ require 'fileutils'
 
 opt = OptionParser.new
 
-outputs = {}
+outputs = { format: :svg }
 
+opt.on('--format VAL') {|v| outputs[:format] = v.to_sym }
 opt.on('--cumulative-job-duration VAL') {|v| outputs[:cumulative_job_duration] = v }
 opt.on('--job-duration VAL') {|v| outputs[:job_duration] = v }
 
@@ -31,7 +32,7 @@ output = outputs.fetch(:cumulative_job_duration, nil)
 if output
   renderer = WorkflowRunStats::CumulativeJobDurationRenderer.new(repo:, workflow:)
 
-  renderer.create_svg(workflow_runs) {|svg| FileUtils.cp(svg, output) }
+  renderer.create(workflow_runs, format: outputs[:format]) {|file| FileUtils.cp(file, output) }
 
   puts "Created #{output}..."
 end
@@ -42,7 +43,7 @@ output = outputs.fetch(:job_duration, nil)
 if output
   renderer = WorkflowRunStats::JobDurationRenderer.new(repo:, workflow:)
 
-  renderer.create_svg(workflow_runs) {|svg| FileUtils.cp(svg, output) }
+  renderer.create(workflow_runs, format: outputs[:format]) {|file| FileUtils.cp(file, output) }
 
   puts "Created #{output}..."
 end

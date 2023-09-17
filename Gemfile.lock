@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    workflow_run_stats (0.1.0)
-      faraday-retry
-      octokit
+    workflow_run_stats (0.0.1.alpha)
+      faraday-retry (~> 2.2)
+      octokit (~> 7.1)
 
 GEM
   remote: https://rubygems.org/

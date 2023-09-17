@@ -20,9 +20,9 @@ Example:
 
     $ workflow_run_stats 'octokit/octokit.rb' 'octokit.yml' '2023-06-01..2023-09-01' --job-duration tmp/job-duration.svg --cumulative-job-duration tmp/cumulative-job-duration.svg
 
-![cumulative-job-duration](https://github.com/mizoR/workflow_run_stats/assets/1257116/5c07332d-af5b-48c4-a1e8-df2a3a46b1c7)
+![cumulative-job-duration](https://github.com/mizoR/workflow_run_stats/assets/1257116/3bcd4e66-0484-4b9b-8a43-7d5f67f0883f)
 
-![job-duration](https://github.com/mizoR/workflow_run_stats/assets/1257116/48d1b992-972f-4b58-896e-8cb159bfb07c)
+![job-duration](https://github.com/mizoR/workflow_run_stats/assets/1257116/d0be9f8d-8fc0-4977-bd23-a65b04925892)
 
 ## Development
 
